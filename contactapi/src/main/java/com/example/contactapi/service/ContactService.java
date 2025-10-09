@@ -2,10 +2,9 @@ package com.example.contactapi.service;
 
 import com.example.contactapi.domain.Contact;
 import com.example.contactapi.repo.ContactRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +23,6 @@ import java.util.function.Function;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 @Service
-@Slf4j
 @Transactional(rollbackFor = Exception.class)
 public class ContactService {
 
@@ -36,8 +34,11 @@ public class ContactService {
 
     public Page<Contact> getAllContacts(int page, int size){
 
+        Pageable pageable = PageRequest.of(page, size);
         return contactRepository.findAll(PageRequest.of(page, size, Sort.by("name")));
     }
+
+
 
     public Contact getContactById(UUID id){
         return contactRepository.findById(id)
